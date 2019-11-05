@@ -1,61 +1,60 @@
 <?php
 
-interface Service
-{
-	public function send(): void;
-	public function setText(string $text): void;
-}
-
-
 /**
  * Class NotificationService
  * @property string $text
- * @property Service $notificator
- * @property User $user
  */
 class NotificationService
 {
 	private $text;
-	private $user;
 
-	public function __construct($user)
-	{
-		$this->user = $user;
-	}
-
-	private function sendByMethod(Service $notificator):void
-	{
-		$notificator->setText($this->text);
-		$notificator->send();
-	}
 	public function setText(string $text):void
 	{
 		$this->text = $text;
 	}
 
-	public function getText():string
+	public function notify(User $user):void
+	{
+		new EmailNotificator($user, $this->text);
+		new SmsNotificator($user, $this->text);
+		new WebNotificator($user, $this->text);
+	}
+}
+
+/**
+ * Class Notificator
+ * @property User $user
+ * @property string $text
+ */
+abstract class Notificator
+{
+	private $user;
+	private $text;
+
+	abstract protected function send():void;
+
+	public function __construct(User $user, string $text)
+	{
+		$this->user = $user;
+		$this->text = $text;
+
+		$this->send();
+	}
+
+	protected function getText():string
 	{
 		return $this->text;
 	}
 
-	public function getUser():User
+	protected function getUser():User
 	{
 		return $this->user;
 	}
-
-	public function notify(User $user):void
-	{
-		$this->sendByMethod(new EmailNotificator($this->user));
-
-		$this->sendByMethod(new SmsNotificator($this->user));
-
-		$this->sendByMethod(new WebNotificator($this->user));
-	}
 }
 
-class EmailNotificator extends NotificationService implements Service
+class EmailNotificator extends Notificator
 {
-	public function send(): void
+	protected function send(): void
 	{
 		//..Sending
 		$text = $this->getText();
@@ -63,9 +62,9 @@ class EmailNotificator extends NotificationService implements Service
 	}
 }
 
-class SmsNotificator extends NotificationService implements Service
+class SmsNotificator extends Notificator
 {
-	public function send(): void
+	protected function send(): void
 	{
 		//..Sending
 		$text = $this->getText();
@@ -73,9 +72,9 @@ class SmsNotificator extends NotificationService implements Service
 	}
 }
 
-class WebNotificator extends NotificationService implements Service
+class WebNotificator extends Notificator
 {
-	public function send(): void
+	protected function send(): void
 	{
 		//..Sending
 		$text = $this->getText();

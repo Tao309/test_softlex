@@ -93,7 +93,7 @@ class EmailNotificator extends NotificationService implements Service
 	public function notify(): void
 	{
 		$text = $this->getText();
-		$user = $this->getUser()->email;
+		$email = $this->getUser()->email;
 	}
 }
 
@@ -102,7 +102,7 @@ class SmsNotificator extends NotificationService implements Service
 	public function notify(): void
 	{
 		$text = $this->getText();
-		$user = $this->getUser()->phone;
+		$phone = $this->getUser()->phone;
 	}
 }
 
@@ -111,7 +111,7 @@ class WebPushNotificator extends NotificationService implements Service
 	public function notify(): void
 	{
 		$text = $this->getText();
-		$user = $this->getUser();
+		$userData = $this->getUser();
 	}
 }
 

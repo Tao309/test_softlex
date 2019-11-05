@@ -11,7 +11,7 @@
  */
 class User
 {
-	use UserRepository;
+	use UserRepository, UserBuilder;
 
 	protected $db;
 
@@ -52,7 +52,7 @@ trait UserRepository
 	{
 		/*
 		 * Абстрактный запрос в БД
-		 * Без проверки перменных и bindParam
+		 * Без проверки переменных и bindParam
 		 */
 		$query = '
 		SELECT users.id, users.name,
@@ -77,12 +77,15 @@ trait UserRepository
 
 		return $users;
 	}
+}
 
+trait UserBuilder
+{
 	/**
 	 * @param array $data
 	 * @return $this
 	 */
-	private function initModel(array $data)
+	protected function initModel(array $data)
 	{
 		$this->id = $data['id'] ?? 0;
 		$this->name = $data['name'] ?? null;

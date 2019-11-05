@@ -29,6 +29,10 @@ interface Service
 
 class NotificationService
 {
+	const WEB = 'web';
+	const SMS = 'sms';
+	const EMAIL = 'email';
+
 	private $user;
 	private $text;
 
@@ -72,10 +76,10 @@ class NotificationService
 	{
 		switch($type)
 		{
-			case 'web':
+			case self::WEB:
 				return $this->webPushNotificator;
 				break;
-			case 'sms':
+			case self::SMS:
 				return $this->smsNotificator;
 				break;
 		}

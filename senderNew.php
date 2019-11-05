@@ -72,7 +72,7 @@ class NotificationService
 		$this->user = $user;
 	}
 
-	public function getPushType(string $type):NotificationService
+	public function getPushType(string $type): Service
 	{
 		switch($type)
 		{

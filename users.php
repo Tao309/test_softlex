@@ -24,6 +24,11 @@ class User
 		$this->db = new DB();
 	}
 
+	public function __toString()
+	{
+		return $this->name;
+	}
+
 	/**
 	 * @param int $id
 	 * @return User[]
@@ -33,12 +38,16 @@ class User
 		//Оставил инициализацию модели тут, для подхвата
 		$model = new User();
 
-		$model->findUsers(['boss_id' => $id]);
+		return $model->findUsers(['boss_id' => $id]);
 	}
 }
 
 trait UserObserver
 {
+	/**
+	 * @param $params
+	 * @return array
+	 */
 	protected function findUsers($params): array
 	{
 		/*
@@ -46,8 +55,10 @@ trait UserObserver
 		 * Без проверки перменных и bindParam
 		 */
 		$query = '
-		SELECT id, name
+		SELECT users.id, users.name,
+		boss.id AS `bossId`, boss.name AS `bossName`
 		FROM users
+		LEFT JOIN users AS boss ON (boss.boss_id = users.id)
 		WHERE
 		';
 		$w = [];
@@ -67,11 +78,24 @@ trait UserObserver
 		return $users;
 	}
 
+	/**
+	 * @param array $data
+	 * @return $this
+	 */
 	private function initModel(array $data)
 	{
 		$this->id = $data['id'] ?? 0;
 		$this->name = $data['name'] ?? null;
-		$this->boss = $data['name'] ?? null;
+		$this->boss = null;
+
+		if(!empty($data['bossId']))
+		{
+			$bossData = [
+				'id' => $data['bossId'],
+				'name' => $data['bossName'],
+			];
+			$this->boss = (new User)->initModel($bossData);
+		}
 
 		return $this;
 	}
@@ -79,5 +103,9 @@ trait UserObserver
 
 $users = User::getUsersByBossId(5);
 foreach ($users as $user) {
-	echo $user->name;
+	echo 'Пользователь: '.$user;
+	if(!empty($user->boss))
+	{
+		echo 'Его босс: '.$user->boss;
+	}
 }

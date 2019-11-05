@@ -24,7 +24,7 @@
 
 interface Service
 {
-	public function send(): void;
+	public function notify(): void;
 }
 
 class NotificationService
@@ -86,16 +86,11 @@ class NotificationService
 
 		return $this->emailNotificator;
 	}
-
-	public function notify()
-	{
-		$this->send();
-	}
 }
 
 class EmailNotificator extends NotificationService implements Service
 {
-	public function send(): void
+	public function notify(): void
 	{
 		$text = $this->getText();
 		$user = $this->getUser()->email;
@@ -104,7 +99,7 @@ class EmailNotificator extends NotificationService implements Service
 
 class SmsNotificator extends NotificationService implements Service
 {
-	public function send(): void
+	public function notify(): void
 	{
 		$text = $this->getText();
 		$user = $this->getUser()->phone;
@@ -113,7 +108,7 @@ class SmsNotificator extends NotificationService implements Service
 
 class WebPushNotificator extends NotificationService implements Service
 {
-	public function send(): void
+	public function notify(): void
 	{
 		$text = $this->getText();
 		$user = $this->getUser();
@@ -126,5 +121,5 @@ $service->setText('Какой-то текст');
 $users = [];
 foreach ($users as $user) {
 	$service->setUser($user);
-	$service->getPushType('web')->notify($text);
+	$service->getPushType('web')->notify();
 }

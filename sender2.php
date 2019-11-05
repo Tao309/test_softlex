@@ -22,11 +22,20 @@ class NotificationService
 }
 
 /**
+ * Interface NotifcatorInterface
+ */
+interface NotifcatorInterface
+{
+	public function getText();
+	public function getUser();
+}
+
+/**
  * Class Notificator
  * @property User $user
  * @property string $text
  */
-abstract class Notificator
+abstract class Notificator implements NotifcatorInterface
 {
 	private $user;
 	private $text;
@@ -41,12 +50,12 @@ abstract class Notificator
 		$this->send();
 	}
 
-	protected function getText():string
+	public function getText():string
 	{
 		return $this->text;
 	}
 
-	protected function getUser():User
+	public function getUser():User
 	{
 		return $this->user;
 	}

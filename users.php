@@ -11,7 +11,7 @@
  */
 class User
 {
-	use UserObserver;
+	use UserRepository;
 
 	protected $db;
 
@@ -42,7 +42,7 @@ class User
 	}
 }
 
-trait UserObserver
+trait UserRepository
 {
 	/**
 	 * @param $params

@@ -12,6 +12,7 @@
 class User
 {
 	use UserObserver;
+
 	protected $db;
 
 	protected $id;
@@ -27,7 +28,7 @@ class User
 	 * @param int $id
 	 * @return User[]
 	 */
-	public static function getUsersByBossId(int $id):array
+	public static function getUsersByBossId(int $id): array
 	{
 		//Оставил инициализацию модели тут, для подхвата
 		$model = new User();
@@ -38,7 +39,7 @@ class User
 
 trait UserObserver
 {
-	protected function findUsers($params):array
+	protected function findUsers($params): array
 	{
 		/*
 		 * Абстрактный запрос в БД
@@ -50,18 +51,16 @@ trait UserObserver
 		WHERE
 		';
 		$w = [];
-		foreach($params as $index => $value)
-		{
-			$w[] = $index.' = '.$value;
+		foreach ($params as $index => $value) {
+			$w[] = $index . ' = ' . $value;
 		}
 		$query .= implode(' AND ', $w);
 
-		$rows =  $this->db->findAll($query);
+		$rows = $this->db->findAll($query);
 
 		$users = [];
 
-		foreach($rows as $row)
-		{
+		foreach ($rows as $row) {
 			$users[] = (new User())->initModel($row);
 		}
 
@@ -79,7 +78,6 @@ trait UserObserver
 }
 
 $users = User::getUsersByBossId(5);
-foreach($users as $user)
-{
+foreach ($users as $user) {
 	echo $user->name;
 }

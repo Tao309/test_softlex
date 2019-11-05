@@ -40,12 +40,15 @@ trait UserObserver
 {
 	protected function findUsers($params):array
 	{
+		/*
+		 * Абстрактный запрос в БД
+		 * Без проверки перменных и bindParam
+		 */
 		$query = '
 		SELECT id, name
 		FROM users
 		WHERE
 		';
-
 		$w = [];
 		foreach($params as $index => $value)
 		{
@@ -53,7 +56,6 @@ trait UserObserver
 		}
 		$query .= implode(' AND ', $w);
 
-		//Абстрактный запрос в БД
 		$rows =  $this->db->findAll($query);
 
 		$users = [];

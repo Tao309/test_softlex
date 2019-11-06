@@ -15,12 +15,13 @@ class User
 
 	protected $db;
 
-	protected $id;
-	protected $name;
-	protected $boss;
+	public $id;
+	public $name;
+	public $boss;
 
 	public function __construct()
 	{
+		//Подключение к БД
 		$this->db = new DB();
 	}
 
